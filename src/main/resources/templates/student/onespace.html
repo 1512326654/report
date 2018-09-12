@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>周报提交页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <link rel="stylesheet" href="/css/front.css">
+    <link rel="stylesheet" href="/css/dy.css">
+    <link rel="stylesheet" type="text/css" href="/css/verify.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <script type="text/javascript" src="/js/verify.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+    .dy-textarea {
+        height: 400px;
+    }
+
+    .dy-page-content {
+        top: 120px;
+        width: 100%;
+        height: calc(100% - 110px);
+    }
+
+    .dy-page-content iframe {
+        background-color: #00F7DE;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<body>
+<div class="x-body">
+    <%--<div style="padding: 20px; background-color: #F2F2F2;">--%>
+    <div class="dy-context">
+        <div style="float: left;width: 50%;align-content: center">
+            <div class="dy-content-right">
+                <div class="layui-card" style="padding:20px;margin-top: 20px">
+                    <fieldset class="layui-elem-field">
+                        <legend>修改密码</legend>
+                        <div class="layui-field-box">
+                            <div class="layui-tab tab layui-row layui-col-space15">
+                                <form class="layui-form">
+                                    <!--原密码-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><span class="x-red">*</span>原密码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" lay-verify="oldPass" id="oldPass"
+                                                   class="layui-input dy-input-wd400" placeholder="请输入原密码">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><!-- 占位 --></div>
+                                    </div>
+                                    <!--新密码-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><span class="x-red">*</span>新密码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" lay-verify="newPass" id="newPass"
+                                                   class="layui-input dy-input-wd400" placeholder="请输入新密码">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><!-- 占位 --></div>
+                                    </div>
+                                    <!--确认密码-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><span class="x-red">*</span>确认密码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" lay-verify="newRepass" id="newRepass"
+                                                   class="layui-input dy-input-wd400" placeholder="请再次输入新密码">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><!-- 占位 --></div>
+                                    </div>
+                                    <%--验证码--%>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">
+                                            <span class="x-red">*</span>验证
+                                        </label>
+                                        <div class="layui-input-inline" id="captcha">
+
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><!-- 占位 --></div>
+                                    </div>
+                                    <!--按钮-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><!--占位--></label>
+                                        <a id="editbtn" disabled="disabled" class="layui-btn layui-btn-disabled"
+                                                lay-filter="add" lay-submit="">点击修改
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div style="float: left;width: 50%; align-content: center">
+            <div class="dy-content-left">
+                <div class="layui-card" style="padding:20px;margin-top: 20px">
+                    <fieldset class="layui-elem-field">
+                        <legend>信息关联</legend>
+                        <%--<div class="layui-field-box dy-connectInfoShow" style="text-align: center">--%>
+                            <%--&lt;%&ndash;占位&ndash;%&gt;--%>
+                        <%--</div>--%>
+                        <div class="layui-field-box dy-connectionInfo-form dy-commonDiv" style="text-align: center">
+                            <div class="layui-tab tab layui-row layui-col-space15">
+                                <div class="layui-form">
+                                    <!--原密码-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><span class="x-red">*</span>关联姓名</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" lay-verify="connectName" id="connectName"
+                                                   class="layui-input dy-input-wd400" placeholder="请输入关联姓名">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><!-- 占位 --></div>
+                                    </div>
+                                    <!--新密码-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><span class="x-red">*</span>关联密码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" lay-verify="connectPass" id="connectPass"
+                                                   class="layui-input dy-input-wd400" placeholder="请输入关联密码">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><!-- 占位 --></div>
+                                    </div>
+                                    <!--按钮-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"><!--占位--></label>
+                                        <a class="layui-btn connectButton" lay-filter="connectButton"
+                                           lay-submit="">点击关联</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-field-box  dy-connectInfoShow" style="text-align: center">
+                            <%--占位--%>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var flag = ${requestScope.info.flag};
+        var jstuName = '${requestScope.info.student.stuName}';
+        var jstuClass = ${requestScope.info.student.stuClass};
+        var jstuGroup = ${requestScope.info.student.stuGroup};
+        if (flag) {
+            $(".dy-connectionInfo-form").html(
+                "<div class='layui-upload-drag layui-col-space15' style='border-color:#1E9FFF;margin:auto 0px;width:40%'>" +
+                "<i class='iconfont' style='font-size: 50px ;color: #1E9FFF'>&#x1005;</i>'" +
+                "<p>信息已关联</p>" +
+                "</div>");
+            $(".dy-connectInfoShow").html(
+                "<div class='layui-upload-drag layui-col-space15' style='border-color:#1E9FFF;margin:auto 0px;width: 40%'>" +
+                "<label>姓名：" + jstuName + "</label>" +
+                "<label>班级：" + jstuClass + "</label>" +
+                "<label>分组：" + jstuGroup + "</label>" +
+                "</div>"
+            );
+        } else {
+
+        }
+        ;
+    });
+    
+    function reset() {
+        // parent.location.reload("/student/toTndex");
+        if(window.parent != window){
+            window.parent.location.reload(true);
+        }
+    }
+</script>
+<script>
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        //自定义验证规则
+        form.verify({
+            // 姓名验证
+            oldPass: function (value) {
+                if (value == "") {
+                    return "原密码不得为空";
+                }
+            },
+            newPass: function (value) {
+                if (value == "") {
+                    return "新密码不得为空";
+                }
+            },
+            newRepass: function (value) {
+                if (value == "") {
+                    return "确认密码不得为空";
+                }
+            },
+            connectName: function (value) {
+                if (value == "") {
+                    return "关联名字不能为空";
+                }
+            },
+            connectPass: function (value) {
+                if (value == "") {
+                    return "关联密码不能为空";
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(connectButton)', function (data) {
+            $.ajax({
+                url: "/student/connectionInfoCheck",
+                type: "POST",
+                data: {
+                    connectName: $("#connectName").val(),
+                    connectPass: $("#connectPass").val(),
+                    userId:${requestScope.info.userId}
+                },
+                success: function (result) {
+                    var data = JSON.parse(result);
+                    layer.open({
+                        title: '信息关联确认',
+                        type: 2,
+                        area: ['460px', '310px'],
+                        fixed: false, //不固定
+                        maxmin: true,
+                        content: '/student/checkInfo?stuId=' + data.stuId,
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);//获取子页面内容
+                            body.find('#stuName').val(data.stuName);
+                            body.find('#stuClass').val(data.stuClass);
+                            body.find('#stuGroup').val(data.stuGroup);
+                        }
+                    });
+                },
+                error: function (re) {
+                    alert(re)
+                }
+            })
+        });
+
+        form.on('submit(add)', function (data) {
+            if ($("#newPass").val() == $("#newRepass").val()) {
+                layer.msg("验证通过", {icon: 6}, function () {
+                    //此处异步请求
+                    $.ajax({
+                        data: {}
+                    })
+                });
+            } else {
+                layer.msg("两次密码不一致", {
+                    icon: 5,
+                }, function () {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    //关闭当前frame
+                    parent.layer.close(index);
+                });
+                return false;
+            }
+        });
+
+    })
+</script>
+<script type="text/javascript">
+    $('#captcha').slideVerify({
+        type: 2,		//类型
+        vOffset: 5,	//误差量，根据需求自行调整
+        vSpace: 5,	//间隔
+        imgName: ['1.jpg', '2.jpg'],
+        imgSize: {
+            width: '400px',
+            height: '200px',
+        },
+        blockSize: {
+            width: '40px',
+            height: '40px',
+        },
+        barSize: {
+            width: '400px',
+            height: '40px',
+        },
+        ready: function () {
+
+        },
+        success: function () {
+            // 验证成功
+            $("#editbtn").removeClass("layui-btn-disabled");
+            $("#editbtn").attr("disabled", false);
+        },
+        error: function () {
+        }
+    });
+
+</script>
+
+</body>
+</html>

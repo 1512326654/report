@@ -1,0 +1,330 @@
+.dy-front-content {
+    position: absolute;
+    top: 46px;
+    right: 0;
+    bottom: 42px;
+    left: 0px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.page-content-center {
+    padding: 15px;
+    border-radius: 1px;
+    margin: auto auto;
+    text-align: center;
+    align-content: center;
+}
+
+.dy-front-card {
+    text-align: center;
+    width: 400px;
+}
+
+.dy-content-color {
+    border: 1px solid #CFCFCF;
+}
+
+.dy-context {
+    background-color: #F2F2F2;
+    width: 100%;
+    height: calc(100% - 40px);
+}
+
+.dy-context .dy-content-left {
+    padding: 0px 20px;
+    /*background-color: #0000cc;*/
+    /*float: left;*/
+}
+
+.dy-context .dy-content-right {
+    padding: 0px 20px;
+    /*background-color: #0000cc;*/
+    /*float: right;*/
+}
+
+.dy-context .dy-content-center{
+    /*background-color: red;*/
+    margin: auto 15%;
+}
+
+.dy-footer {
+    height: 50px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    background-color: #222;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    line-height: 41px;
+    color: #fff;
+    /*padding-left: 10px;*/
+}
+
+.dy-footer .copyright {
+    /*margin-left: 10px;*/
+    /*dongyao*/
+    text-align: center;
+}
+
+.dy-footer .copyright cite {
+    color: white;
+}
+
+.dy-footer .copyright cite:hover {
+    color: #9F9F9F;
+}
+
+.dy-layer-style {
+    padding: 50px;
+    line-height: 22px;
+    background-color: #74b9ff;
+    color: #fff;
+    font-weight: 300;
+}
+
+.left-nav {
+    position: absolute;
+    top: 46px;
+    bottom: 42px;
+    left: 0;
+    z-index: 2;
+    padding-top: 10px;
+    background-color: #EEEEEE;
+    width: 220px;
+    max-width: 220px;
+    overflow: auto;
+    overflow-x: hidden;
+    border-right: 1px solid #e5e5e5;
+
+    /*width: 0px;*/
+}
+
+.left-nav #nav li {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.left-nav #nav li:hover > a {
+    /*color: blue;*/
+}
+
+.left-nav #nav .current {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.left-nav #nav li a {
+    font-size: 14px;
+    padding: 10px 15px 10px 20px;
+    display: block;
+    cursor: pointer;
+}
+
+.left-nav #nav li a cite {
+    font-size: 14px;
+}
+
+.left-nav #nav li .sub-menu {
+    display: none;
+}
+
+.left-nav #nav li .opened {
+    display: block;
+}
+
+.left-nav #nav li .opened:hover {
+    /*background: #fff  0 0 no-repeat;*/
+}
+
+.left-nav #nav li .opened .current {
+
+}
+
+.left-nav #nav li .sub-menu li:hover {
+    /*color: blue;*/
+    /*background: #fff  0 0 no-repeat;*/
+}
+
+.left-nav #nav li .sub-menu li a {
+    padding: 12px 15px 12px 30px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.left-nav #nav li .sub-menu li .sub-menu li a {
+    padding-left: 45px;
+}
+
+.left-nav #nav li .sub-menu li a:hover {
+    color: #148cf1;
+}
+
+.left-nav #nav li .sub-menu li a i {
+    font-size: 12px;
+}
+
+.left-nav #nav li a i {
+    padding-right: 10px;
+    line-height: 14px;
+}
+
+.left-nav #nav li .nav_right {
+    float: right;
+    font-size: 16px;
+}
+
+.x-slide_left {
+    width: 17px;
+    height: 61px;
+    background: 0 0 no-repeat;
+    position: absolute;
+    top: 200px;
+    left: 221px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.page-content {
+    position: absolute;
+    top: 46px;
+    right: 0;
+    bottom: 42px;
+    left: 221px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.page-content-bg {
+    position: absolute;
+    top: 46px;
+    right: 0;
+    bottom: 42px;
+    left: 221px;
+    background: rgba(0, 0, 0, 0.5) 0 0 no-repeat;
+    overflow: hidden;
+    z-index: 100;
+    display: none;
+}
+
+/*修改*/
+.right-nav {
+    position: absolute;
+    top: 46px;
+    bottom: 42px;
+    right: 0;
+    z-index: 2;
+    padding-top: 10px;
+    background-color: #EEEEEE;
+    width: 220px;
+    max-width: 220px;
+    overflow: auto;
+    overflow-x: hidden;
+    border-right: 1px solid #e5e5e5;
+
+    /*width: 0px;*/
+}
+
+.right-nav #rightnav li {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.right-nav #rightnav li:hover > a {
+    /*color: blue;*/
+}
+
+.right-nav #rightnav .current {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.right-nav #rightnav li a {
+    font-size: 14px;
+    padding: 10px 15px 10px 20px;
+    display: block;
+    cursor: pointer;
+}
+
+.right-nav #rightnav li a cite {
+    font-size: 14px;
+}
+
+.right-nav #rightnav li .sub-menu {
+    display: none;
+}
+
+.right-nav #rightnav li .opened {
+    display: block;
+}
+
+.right-nav #rightnav li .opened:hover {
+    /*background: #fff  0 0 no-repeat;*/
+}
+
+.right-nav #rightnav li .opened .current {
+
+}
+
+.right-nav #rightnav li .sub-menu li:hover {
+    /*color: blue;*/
+    /*background: #fff  0 0 no-repeat;*/
+}
+
+.right-nav #rightnav li .sub-menu li a {
+    padding: 12px 15px 12px 30px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.right-nav #rightnav li .sub-menu li .sub-menu li a {
+    padding-left: 45px;
+}
+
+.right-nav #rightnav li .sub-menu li a:hover {
+    color: #148cf1;
+}
+
+.right-nav #rightnav li .sub-menu li a i {
+    font-size: 12px;
+}
+
+.right-nav #rightnav li a i {
+    padding-right: 10px;
+    line-height: 14px;
+}
+
+.right-nav #rightnav li .nav_right {
+    float: right;
+    font-size: 16px;
+}
+
+.x-slide_left {
+    width: 17px;
+    height: 61px;
+    background: 0 0 no-repeat;
+    position: absolute;
+    top: 200px;
+    left: 221px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.page-content-report {
+    position: absolute;
+    top: 46px;
+    right: 221px;
+    bottom: 42px;
+    left: 221px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.page-content-bg-report {
+    position: absolute;
+    top: 46px;
+    right: 221px;
+    bottom: 42px;
+    left: 221px;
+    background: rgba(0, 0, 0, 0.5) 0 0 no-repeat;
+    overflow: hidden;
+    z-index: 100;
+    display: none;
+}
+
+/*修改*/

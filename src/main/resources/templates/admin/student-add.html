@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <!--姓名-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="s_name" class="layui-input dy-input-disable" placeholder="请输入姓名">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>填写后将不可修改
+                </div>
+            </div>
+            <!--性别-->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>性别</label>
+                <div class="layui-input-inline">
+                    <select id="s_sex_select">
+                        <option value="">请选择性别</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="layui-form-mid layui-word-aux"><!--占位--></div>
+            </div>
+            <!--班级-->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>班级</label>
+                <div class="layui-input-inline">
+                    <select id="s_class_select">
+                        <option value="">请选择班级</option>
+                        <option value="1">一班</option>
+                        <option value="2">二班</option>
+                    </select>
+                </div>
+                <div class="layui-form-mid layui-word-aux"><!--占位--></div>
+            </div>
+            <!--分组-->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>分组</label>
+                <div class="layui-input-inline">
+                    <select id="s_group_select">
+                        <option value="">请选择分组</option>
+                        <option value="1">1组</option>
+                        <option value="2">2组</option>
+                        <option value="3">3组</option>
+                        <option value="4">4组</option>
+                        <option value="5">5组</option>
+                        <option value="6">6组</option>
+                        <option value="7">7组</option>
+                        <option value="8">8组</option>
+                        <option value="9">9组</option>
+                    </select>
+                </div>
+                <div class="layui-form-mid layui-word-aux"><!--占位--></div>
+            </div>
+            <!--按钮-->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><!--占位--></label>
+                <button id="addbtn" class="layui-btn layui-btn-disabled" disabled="disabled">点击添加</button>
+            </div>
+      </form>
+    </div>
+</body>
+<script type="text/javascript">
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+        $("#s_name").blur(function () {
+            if ($("#s_name").val() == ""){
+                $("#addbtn").addClass("layui-btn-disabled");
+                $("#addbtn").attr("disabled",true);
+                layer.msg("姓名为必填项", {icon: 5 });
+            }else {
+                $("#addbtn").removeClass("layui-btn-disabled");
+                $("#addbtn").attr("disabled",false);
+            }
+        });
+        $("#addbtn").click(function () {
+            if ($("#s_sex_select").val() != "" && $("#s_group_select").val() != "" && $("#s_class_select").val() != ""){
+                layer.msg("验证通过", {icon: 5 });
+            }else {
+                layer.msg("信息填写不完整", {icon: 5 });
+            }
+        })
+    });
+</script>
+</html>

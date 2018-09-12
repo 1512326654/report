@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="cn.worldyao.report.dao.UserDAO">
+
+    <!--用户名检测-->
+    <select id="checkUsername" resultType="string">
+        SELECT USERNAME FROM XT_USER_INFO WHERE USERNAME = #{userName}
+    </select>
+
+    <!--学生信息关联显示-->
+    <select id="studentConnection" resultType="cn.worldyao.report.entity.Student">
+        SELECT * FROM XT_STUDENT_INFO WHERE STUID = #{stuId}
+    </select>
+
+    <!--用户注册-->
+    <insert id="userRegist">
+        INSERT INTO XT_USER_INFO(USERNAME,USERPASS) VALUES(#{userName}, #{userPass})
+    </insert>
+
+    <!--用户登录-->
+    <select id="userLogin" resultType="cn.worldyao.report.entity.User">
+        SELECT * FROM XT_USER_INFO WHERE USERNAME = #{userName}  AND USERPASS = #{userPass}
+    </select>
+
+    <!--    <update id="userConnectionInfo">
+            UPDATE XT_USER_INFO SET USER_STUID = #{stuId}  WHERE USERID = #{userId}
+        </update>-->
+
+
+    <!--显示学生信息-->
+    <select id="showStudentInfo" resultType="cn.worldyao.report.entity.StudentUser">
+        SELECT U.USERID AS 'USERID',USERNAME,STUNAME,STUCLASS,STUGROUP,STUSHEET
+        FROM XT_USER_INFO U
+        JOIN XT_STUDENT_INFO S
+        ON(S.STUID = U.USER_STUID)
+        <where>
+            <if test=' stuClass != "0" '>
+                STUCLASS = #{stuClass}
+            </if>
+            <if test=' stuGroup != "0" '>
+                AND STUGROUP = #{stuGroup}
+            </if>
+        </where>
+    </select>
+
+    <!--用户信息关联-->
+    <update id="userConnectionInfo">
+        UPDATE XT_USER_INFO SET USER_STUID = #{stuId}  WHERE USERID = #{userId}
+    </update>
+
+
+    <!--修改密码，包含重置密码-->
+    <update id="alterPassword">
+        UPDATE XT_USER_INFO SET USERPASS = #{userPass}  WHERE USERID = #{userId}
+    </update>
+
+    <!--验证是否存在QQ-->
+    <select id="QQCheck" resultType="cn.worldyao.report.entity.User">
+        SELECT * FROM XT_USER_INFO WHERE USERQQ = #{userQQ}
+    </select>
+
+    <!--使用qq进行注册-->
+    <insert id="QQRegist">
+        INSERT INTO XT_USER_INFO(USERNAME,USERQQ) VALUES(#{userName},#{userQQ})
+    </insert>
+
+
+    <!--显示关联状态-->
+    <select id="showAssociationStauts" resultType="cn.worldyao.report.entity.StudentUser">
+        SELECT STUNAME,STUCLASS,STUGROUP,IF(ISNULL(USERID),'未关联','已关联') AS 'STATUS' FROM  XT_STUDENT_INFO ORDER BY USERID
+    </select>
+
+</mapper>

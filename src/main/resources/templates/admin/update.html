@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>演示-添加内容</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="wcodeth=device-wcodeth, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/jeui.css" media="all">
+    <link rel="stylesheet" href="../css/skin/jebox.css"  media="all">
+    <link rel="stylesheet" href="../css/skin/jedate.css"  media="all">
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../js/modules/jeui.js"></script>
+    <script type="text/javascript" src="../js/layer/layer.js"></script>
+</head>
+<body>
+<div class="je-p20">
+
+    <!--<form id="itemcheac">-->
+    <div class="je-form-item">
+        <div class="je-w100 je-dib">
+            <label class="je-label je-f14">姓名</label>
+            <div class="je-inputbox">
+                <input type="text" id="s_name" disabled="disabled" value="${param.s_name}" name="title" autocomplete="off" class="je-input">
+            </div>
+        </div>
+    </div>
+    <div class="je-form-item">
+        <div class="je-w40 je-dib">
+            <label class="je-label je-f14">班级</label>
+            <select class="myselect" id="s_class">
+                <option value="1">一班</option>
+                <option value="2">二班</option>
+            </select>
+        </div>
+        <div class="je-w40 je-dib">
+            <label class="je-label je-f14">分组</label>
+            <select class="myselect" id="s_group">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select>
+        </div>
+    </div>
+    <div class="je-form-item je-f14">
+        <label class="je-label je-f14"></label>
+        <a class="je-btn" id="updatebtn">确认修改</a>
+    </div>
+    <!--</form>-->
+
+</div>
+
+<script type="text/javascript">
+    jeui.use(["jeSelect"],function () {
+        $(".myselect").jeSelect({
+            sosList: false
+        });
+    })
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        var s_group = ${param.s_group};
+        var s_class = ${param.s_class};
+        // alert(s_group);
+        // alert(s_class);
+        if (s_class == 1){
+            $("#s_class").find("option[value='1']").attr("selected",true);
+        }else if (s_class == 2){
+            $("#s_class").find("option[value='2']").attr("selected",true);
+        }
+        //通过传递过来的值来确定被选中的值
+        if (s_group == 1){
+            $("#s_group").find("option[value='1']").attr("selected",true);
+        }else if (s_group == 2){
+            $("#s_group").find("option[value='2']").attr("selected",true);
+        }else if (s_group == 3){
+            $("#s_group").find("option[value='3']").attr("selected",true);
+        }else if (s_group == 4){
+            $("#s_group").find("option[value='4']").attr("selected",true);
+        }else if (s_group == 5){
+            $("#s_group").find("option[value='5']").attr("selected",true);
+        }else if (s_group == 6){
+            $("#s_group").find("option[value='6']").attr("selected",true);
+        }else if (s_group == 7){
+            $("#s_group").find("option[value='7']").attr("selected",true);
+        }else if (s_group == 8){
+            $("#s_group").find("option[value='8']").attr("selected",true);
+        }else if (s_group == 9){
+            $("#s_group").find("option[value='9']").attr("selected",true);
+        }
+        // var index = parent.layer.getFrameIndex(window.name);
+        /**
+         * 触发按钮点击的事件
+         * 确认添加---->被点击
+         * 2018-07-09
+         */
+        $("#updatebtn").click(function () {
+            //获取输入框的值
+            var getName = $("#s_name").val();
+            //获取下拉菜单的值
+            var getClass = $("#s_class option:selected").val();
+            var getGroup = $("#s_group option:selected").val();
+            // alert(getName);
+            // alert(getGroup);
+            // alert(getClass);
+            if (getName != "" && getClass != "default" && getGroup != "default") {
+                //异步请求
+                $.ajax({
+                    url:"../AdminServlet",
+                    type: "post",
+                    // dataType:"json",
+                    // contentType:"application/json",
+                    // data:JSON.stringify({"STR":1}),
+                    data:{
+                        operating:"updatestudentinfo",
+                        name:getName,
+                        class:getClass,
+                        group:getGroup
+                    },
+
+                    success: function (result) {
+                        var dataObj2 = JSON.parse(result);
+                        layer.msg('修改成功', {icon: 6});
+                        //设置延迟，防止layer.msg失效
+                        setTimeout(function () {
+                            self.location = document.referrer;
+                        }, 3000);
+                        //返回到上个页面，并进行刷新
+
+                    },
+                    error: function (res) {
+                        layer.msg('修改失败', {icon: 5});
+                        setTimeout(function () {
+                            //返回到上个页面，并进行刷新
+                            self.location = document.referrer;
+                        }, 3000);
+                    }
+                })
+            }else {
+                layer.msg('信息填写不全', {icon: 5});
+            }
+        })
+    })
+</script>
+<!--
+http://www.qdfuns.com/notes/13967/3cdebc6a132f33a3e65aa2b6019a7487.html
+http://www.jq22.com/demo/jQueryNavHover20161129/
+-->
+</body>
+</html>

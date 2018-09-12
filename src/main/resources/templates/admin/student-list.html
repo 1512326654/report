@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="layui-anim layui-anim-up">
+<!--面包屑导航开始-->
+<div class="x-nav">
+  <span class="layui-breadcrumb">
+    <a href="">首页</a>
+    <a href="">学生管理</a>
+    <a><cite>学生信息列表</cite></a>
+  </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="iconfont" style="line-height:30px">&#xe6aa;</i></a>
+</div>
+<!--面包屑导航结束-->
+<!--内容主体开始-->
+<div class="x-body">
+    <!--工具栏开始-->
+    <blockquote class="layui-elem-quote">
+        <!--条件工具条开始-->
+        <div class="layui-row">
+            <div class="layui-form layui-col-md12 x-so">
+                <!--班级-->
+                <div class="layui-input-inline">
+                    <select id="classSelect">
+                        <option value="0">请选择班级</option>
+                        <option value="1">一班</option>
+                        <option value="2">二班</option>
+                    </select>
+                </div>
+                <!--分组-->
+                <div class="layui-input-inline">
+                    <select id="groupSelect">
+                        <option value="0">请选择分组</option>
+                        <option value="1">1组</option>
+                        <option value="2">2组</option>
+                        <option value="3">3组</option>
+                        <option value="4">4组</option>
+                        <option value="5">5组</option>
+                        <option value="6">6组</option>
+                        <option value="7">7组</option>
+                        <option value="8">8组</option>
+                        <option value="9">9组</option>
+                        <option value="10">10组</option>
+                        <option value="11">11组</option>
+                        <option value="12">12组</option>
+                        <option value="13">13组</option>
+                        <option value="14">14组</option>
+                    </select>
+                </div>
+                <!--姓名-->
+                <div class="layui-input-inline">
+                    <input type="text" name="username" placeholder="请输入姓名[可选]" autocomplete="off" class="layui-input">
+                </div>
+                <!--查找按钮-->
+                <div class="layui-input-inline">
+                    <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i>查找
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!--条件工具条结束-->
+        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+        <button class="layui-btn" onclick="x_admin_show('添加学生信息','./student-add.html',800,520)"><i
+                class="layui-icon"></i>添加
+        </button>
+        <span class="x-right dy-count" style="line-height:40px">
+            <%--占位--%>
+        </span>
+    </blockquote>
+    <!--工具栏结束-->
+    <!--表格开始-->
+    <table class="layui-hide" lay-filter="demo" id="test"></table>
+    <div id="laypage"></div>
+    <!--表格结束-->
+</div>
+<!--内容主体结束-->
+<!--操作工具条开始-->
+<script id="barDemo" type="text/html">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!--操作工具体结束-->
+</body>
+<script type="application/javascript">
+    layui.use(['table', 'form', 'laydate'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        //初始化表格数据
+        addToTable(${param.classNum}, 0);
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function (obj) {
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.msg('ID：' + data.stuName + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                x_admin_show("修改学生信息", "/admin/studentEdit.do?stuId="+ data.stuId + "&stuName=" + data.stuName + "&stuClass=" + data.stuClass + "&stuGroup=" + data.stuGroup + "&stuSheet=" + data.stuSheet + "&stuLeader=" + data.stuLeader, 800, 520);
+                // layer.alert('编辑行：<br>'+ JSON.stringify(data.s_name))
+            }
+        });
+
+        //监听提交
+        form.on('submit(sreach)', function (data) {
+            var classNum = $("#classSelect option:selected").val();
+            var groupNum = $("#groupSelect option:selected").val();
+            if ((${param.classNum}) != 0) {
+                classNum = ${param.classNum};
+            }
+            addToTable(classNum, groupNum);
+        });
+
+        var $ = layui.$, active = {
+            getCheckData: function () {
+                //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            , getCheckLength: function () {
+                //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.msg('选中了：' + data.length + ' 个');
+            }
+            , isAll: function () {
+                //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var typer = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        function addToTable(STUCLASS, STUGROUP) {
+            table.render({
+                elem: '#test',
+                //是否分页
+                page: true,
+                url: '/admin/getStudentList.do?stuClass=' + STUCLASS + '&stuGroup=' + STUGROUP ,
+                request: {
+                    pageName: 'pageName', //页码的参数名称，默认：page
+                    limitName: 'limitName' //每页数据量的参数名，默认：limit
+                },
+                method: 'POST',
+                limit:6,
+                limits:[6,12],
+                loading:true,
+                cols: [[
+                    // {type:'checkbox', width:80, fixed: 'left'},
+                    {field: 'stuName', width: 100, title: '姓名'},
+                    {field: 'stuClass', title: '班级', sort: true},
+                    {field: 'stuGroup', title: '组别', sort: true},
+                    {field: 'stuSheet', title: '工作表编号', sort: true},
+                    {field: 'leader', title: '是否组长', sort: true},
+                    {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
+                ]],
+                id: 'idTest',
+                done: function (res, curr, count) {
+                    $(".dy-count").html("共" + count + "条数据，当前第" + curr + "页");
+                }
+            });
+        }
+    });
+
+
+    function delAll(argument) {
+        var data = tableCheck.getData();
+
+        layer.confirm('确认要删除吗?' + data, function (index) {
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+    }
+</script>
+</html>

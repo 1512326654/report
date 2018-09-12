@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="cn.worldyao.report.dao.StudentDAO">
+    <!--学生登录-->
+    <select id="studentLogin" resultType="cn.worldyao.report.entity.Student">
+        SELECT * FROM XT_STUDENT_INFO WHERE STUNAME = #{stuName} AND STUSHEET = #{stuSheet}
+    </select>
+
+    <update id="stuConnectionInfo">
+        UPDATE XT_STUDENT_INFO SET USERID = #{userId} WHERE STUID = #{stuId}
+    </update>
+
+
+    <!--查询成员周报的提交状态-->
+    <select id="showMemberReportStatus" resultType="cn.worldyao.report.entity.MemberReportStatus">
+        SELECT STUNAME,IF(ISNULL(REPADDTIME),'未提交','已提交') AS 'STATUS'
+        FROM
+        (
+        SELECT * FROM XT_STUDENT_INFO
+        <choose>
+            <when test='stuClass != "0"'>
+                WHERE STUCLASS = #{stuClass}
+                <if test='stuGroup != "0"'>
+                    AND STUGROUP = #{stuGroup}
+                </if>
+            </when>
+        </choose>
+        ) S
+        LEFT JOIN (SELECT * FROM XT_REPORT_INFO WHERE REPWEEK = #{repWeek}) R
+        ON(S.STUCLASS = R.REPCLASS AND S.STUSHEET = R.REPSHEET)
+        ORDER BY STATUS DESC
+    </select>
+
+    <!--组长管理员使用，查询本周提交的人数-->
+    <select id="showGroupDataStatistics" resultType="cn.worldyao.report.entity.GroupReported">
+        SELECT COUNT(STUNAME)  AS 'NUM',(SELECT COUNT(STUNAME) FROM XT_STUDENT_INFO S
+        JOIN XT_REPORT_INFO R ON (S.STUCLASS = R.REPCLASS AND S.STUSHEET = R.REPSHEET)
+        WHERE STUCLASS = #{stuClass} AND STUGROUP = #{stuGroup} AND REPWEEK = #{repWeek})  AS 'REPORTEDNUM'
+        FROM XT_STUDENT_INFO
+        WHERE STUCLASS = #{stuClass} AND STUGROUP = #{stuGroup}
+    </select>
+
+    <!--学生列表-->
+    <select id="getStudentList" resultType="cn.worldyao.report.entity.Student">
+        SELECT (SELECT COUNT(STUID) FROM XT_STUDENT_INFO) AS 'COUNT',STUID,STUNAME,STUCLASS,STUGROUP,STUSHEET,STULEADER,IF(STULEADER=3,'是','否')
+        AS 'LEADER'
+        FROM XT_STUDENT_INFO
+        <where>
+            <if test=' stuClass != "0" '>
+                AND STUCLASS = #{stuClass}
+            </if>
+            <if test=' stuGroup != "0" '>
+                AND STUGROUP = #{stuGroup}
+            </if>
+        </where>
+        ORDER BY STUSHEET
+        LIMIT ${pageSize*(pageNum-1)},${pageSize}
+    </select>
+
+    <!--学生列表-->
+    <select id="getStudentListNum" resultType="int">
+        SELECT COUNT(STUID) AS 'COUNT' FROM XT_STUDENT_INFO
+        <where>
+            <if test=' stuClass != "0" '>
+                AND STUCLASS = #{stuClass}
+            </if>
+            <if test=' stuGroup != "0" '>
+                AND STUGROUP = #{stuGroup}
+            </if>
+        </where>
+    </select>
+
+    <!--修改学生信息-->
+    <update id="alterStudentInfo">
+        UPDATE XT_STUDENT_INFO SET STUCLASS = #{stuClass},STUGROUP = #{stuGroup},STUSHEET = #{stuSheet},STULEADER = #{stuLeader}
+        WHERE STUID = #{stuId}
+    </update>
+
+
+
+</mapper>

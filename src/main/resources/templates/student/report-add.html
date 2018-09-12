@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>周报提交页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <%--<link rel="stylesheet" href="/css/font.css">--%>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <link rel="stylesheet" href="/css/front.css">
+    <link rel="stylesheet" href="/css/dy.css">
+    <link rel="stylesheet" href="/css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <script type="text/javascript" src="/js/modernizr.js"></script>
+    <script type="text/javascript" src="/js/jquery.mobile.custom.min.js"></script>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+    .dy-textarea {
+        height: 400px;
+    }
+
+    .dy-page-content {
+        top: 120px;
+        width: 100%;
+        height: calc(100% - 110px);
+    }
+
+    .dy-page-content iframe {
+        background-color: #00F7DE;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<script>
+    /*    $(function () {
+            $.ajax({
+                url:"../AdminBackStageServlet",
+                type:"POST",
+                data:{
+                    operating:"showReportBorad",
+                },
+                success:function (result) {
+                    $(".boradContext").html(JSON.parse(result));
+                },
+                error:function () {
+
+                }
+            });
+        })*/
+</script>
+<body>
+<div class="x-body">
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-tab tab layui-row layui-col-space15">
+            <div class="layui-col-md12 dy-board">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <label style="font-size: 20px">公告板</label>
+                        <a class="layui-btn layui-icon dy-board-close"
+                           style="float: right;border: none;background: none;color: #6E3333">&#x1006;</a>
+                    </div>
+                    <div class="layui-card-body boradContext">
+                        占位
+                    </div>
+                </div>
+            </div>
+            <!--周报表单主题-->
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <form action="" method="post" class="layui-form layui-form-pane">
+                            <div class="layui-form-item">
+                                <!--显示姓名-->
+                                <div class="layui-inline groupleader">
+                                    <label class="layui-form-label">登录名</label>
+                                    <div class="layui-input-inline">
+                                        <input disabled class="layui-input dy-input-wd250"
+                                               value="${session.info.student.stuName}"/>
+                                    </div>
+                                </div>
+                                <!--显示班级-->
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">班级</label>
+                                    <div class="layui-input-inline">
+                                        <input disabled class="layui-input dy-input-wd250"
+                                               value="${session.info.student.stuClass}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <!--显示分组-->
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">分组</label>
+                                    <div class="layui-input-inline">
+                                        <input disabled class="layui-input dy-input-wd250"
+                                               value="${session.info.student.stuGroup}"/>
+                                    </div>
+                                </div>
+                                <!--显示当前周-->
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">当前周</label>
+                                    <div class="layui-input-inline">
+                                        <input disabled id="weekstr" class="layui-input dy-input-wd250"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--个人周报-->
+                            <div id="reportContextDiv" class="layui-form-item layui-form-text" style="width: 70%">
+                                <label class="layui-form-label"><label class="dy-timeShowContent"></label>周报内容</label>
+                                <div class="layui-input-block">
+                                    <textarea id="reportContext" placeholder="请输入内容"
+                                              class="layui-textarea dy-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div id="reportButtonDiv" class="layui-form-item">
+                                <a id="reportButton" onclick='reportReport()' class="layui-btn">提交周报</a>
+                            </div>
+                            <div id="returnButtonDiv" class="layui-form-item">
+                                <!--占位-->
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="htmleaf-container">
+    <div class="cd-horizontal-timeline">
+        <div style="background: rgba(116,184,255,0.6); width: 100% ;color: white; height: 100px ; bottom: 0px ; position: fixed">
+            <div class="timeline">
+                <div class="events-wrapper">
+                    <%--${[0].repId}--%>
+                    <div class="events">
+                        <ol id="timeLine">
+                            <!--<c:forEach items="${requestScope.info.timeLine}" var="item" varStatus="status">-->
+                                <!--<tr>-->
+                                    <!--<li><a href="javascript:;" onclick="showTimeReport(${item.repId},${item.repWeek})"-->
+                                           <!--data-date="${item.repAddTime}">第${item.repWeek}周</a></li>-->
+                                <!--</tr>-->
+                            <!--</c:forEach>-->
+                        </ol>
+                        <span class="filling-line" aria-hidden="true"></span>
+                    </div> <!-- .events -->
+                </div> <!-- .events-wrapper -->
+
+                <ul class="cd-timeline-navigation">
+                    <li><a href="#0" class="prev inactive layui-icon-right">Prev</a></li>
+                    <li><a href="#0" class="next">Next</a></li>
+                </ul> <!-- .cd-timeline-navigation -->
+            </div> <!-- .timeline -->
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/js/xt-report.js"></script>
+<script type="text/javascript" src="/js/weekInfo.js"></script>
+<script>
+    layui.use(['layer', 'util'], function () {
+        $ = layui.jquery;
+        var util = layui.util;
+        var layer = layui.layer;
+
+        var timestr = getThisWeek();
+        $("#weekstr").val(timestr);
+
+        $(".dy-board-close").click(function () {
+            remove(".dy-board")
+
+        })
+        setTimeout(function () {
+            // report_show(${requestScope.info.student.stuClass}, ${requestScope.info.student.stuSheet}, "#reportContext");
+        }, 700);
+
+        if ($("#reportContext").val().length != 0){
+
+        }
+    })
+</script>
+<script>
+    function showTimeReport(REPID, REPWEEK) {
+        $.ajax({
+            url: "/student/showReportByREPID",
+            type: "POST",
+            data: {
+                repId: REPID
+            },
+            success: function (result) {
+                var data = JSON.parse(result);
+                $("#reportContext").val(data);
+                $("#reportButton").remove();
+                $(".dy-timeShowContent").html("正在查看第" + REPWEEK + "周");
+                $("#returnButtonDiv").html("<a id='returnButton' onclick='returnToEdit()' class='layui-btn'>返回编辑周报</a>");
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function returnToEdit() {
+        $(".dy-timeShowContent").html("正在编辑当前周");
+        $("#reportContext").val("");
+        // report_show(${requestScope.info.student.stuClass}, ${requestScope.info.student.stuSheet}, "#reportContext");
+        $("#returnButton").remove();
+        $("#reportButtonDiv").html("<a id='reportButton' onclick='reportReport()' class='layui-btn'>提交周报</a>");
+    }
+
+    function reportReport() {
+        //提交个人周报
+        var con = $("#reportContext").val();
+        if (con != "") {
+            //调用添加周报函数
+            report_add('${requestScope.info.student.stuId}', '${requestScope.info.student.stuClass}', '${requestScope.info.student.stuSheet}', con);
+        } else {
+            layer.msg("没有填写是不能提交的哦！！！！！", {icon: 5})
+        }
+    }
+
+</script>
+<script type="text/javascript" src="/js/main.js"></script> <!-- Resource jQuery -->
+<script>
+    $(function () {
+        jQuery(".event_box").slide({
+            titCell: ".parHd li",
+            mainCell: ".parBd",
+            defaultPlay: false,
+            titOnClassName: "act",
+            prevCell: ".sPrev",
+            nextCell: ".sNext"
+        });
+        jQuery(".parHd").slide({
+            mainCell: " ul",
+            vis: 6,
+            effect: "leftLoop",
+            defaultPlay: false,
+            prevCell: ".sPrev",
+            nextCell: ".sNext"
+        });
+    });
+</script>
+</body>
+</html>

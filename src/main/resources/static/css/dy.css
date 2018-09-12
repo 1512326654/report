@@ -1,0 +1,48 @@
+.dy-input-wd400{
+    /*background-color: #e2e2e2;*/
+    width: 400px;
+}
+.dy-input-wd250{
+    /*background-color: #e2e2e2;*/
+    width: 250px;
+}
+
+.dy-show-disable{
+    display: none;
+}
+
+.dy-input-disable{
+    /*background-color: #e2e2e2;*/
+    background-color: #f2f2f2;
+}
+
+.dy-exercise{
+    padding-left: 40px;
+    background-color: #9F9F9F;
+}
+
+.dy-exercise p{
+    font-size: 18px;
+}
+
+.dy-right-menu{
+    height: 30px ;
+    width: 100% ;
+    background: #EFEEF0 ;
+    writing-mode: vertical-lr;
+    border-bottom: 1px solid #E5E5E5 ;
+    padding: 5px 5px
+}
+
+.dy-right-close{
+    margin:auto ;
+    background: #D5D3D3 ;
+    height: 30px ;
+    width: 30px ;
+    line-height: 30px ;
+    text-align: center ;
+
+}
+.dy-right-close .iconfont{
+    color: white;
+}

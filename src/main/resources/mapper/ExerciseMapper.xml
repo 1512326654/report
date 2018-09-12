@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="cn.worldyao.report.dao.ExerciseDAO">
+
+    <!--分类型选择题目-->
+    <select id="getExerciseType" resultType="cn.worldyao.report.entity.Exercise">
+        SELECT EXID,EXCONTENT,ANA,ANB,ANC,ANSD,ANE,ANF,ANG FROM XT_EXERCISE_INFO
+        WHERE EXTYPE = #{extypeId}
+        AND EXCATA = #{exCataId}
+        LIMIT ${pageSize*(pageNum-1)},${pageSize}
+    </select>
+
+    <!--获取类型题目的总数-->
+    <select id="getExerciseTypeNum" resultType="int">
+        SELECT COUNT(EXID) FROM XT_EXERCISE_INFO WHERE EXTYPE = #{exType} AND EXCATA = #{exCata}
+    </select>
+
+    <!--获取类型-->
+    <select id="getType" resultType="cn.worldyao.report.entity.Type">
+        SELECT EXTYPEID,EXTYPENAME FROM XT_EXERCISETYPE_INFO
+    </select>
+
+    <!--获取分类-->
+    <select id="getCata" resultType="cn.worldyao.report.entity.Catalog">
+        SELECT EXCATAID,EXCATANAME FROM XT_EXERCISECATA_INFO
+    </select>
+
+
+</mapper>

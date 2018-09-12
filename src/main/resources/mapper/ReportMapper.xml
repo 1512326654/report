@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="cn.worldyao.report.dao.ReportDAO">
+    <!--学生添加周报-->
+    <insert id="applyReport" parameterType="Report">
+        INSERT INTO XT_REPORT_INFO(STUID, REPCLASS	, REPSHEET , REPWEEK , REPCONTEXT , REPADDTIME)
+        VALUES(#{stuId}, #{repClass}, #{repSheet}, #{repWeek}, #{repContext}, #{repAddtime})
+    </insert>
+
+    <!--通过条件查询周报-->
+    <!--条件为：班级号【可选】，周次号【可选】，工作表号【可选】-->
+    <select id="selReport" resultType="Report">
+        SELECT * FROM XT_REPORT_INFO
+        <choose>
+            <when test='repClass != "0"'>
+                WHERE REPCLASS = #{repClass}
+                <choose>
+                    <when test='repWeek != "0"'>
+                        AND REPWEEK = #{repWeek}
+                        <if test='repSheet != "0"'>
+                            AND REPSHEET = #{repSheet}
+                        </if>
+                    </when>
+                    <otherwise>
+                        <if test='repSheet != "0"'>
+                            AND REPSHEET = #{repSheet}
+                        </if>
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                <choose>
+                    <when test='repWeek != "0"'>
+                        WHERE REPWEEK = #{repWeek}
+                        <if test='repSheet != "0"'>
+                            AND REPSHEET = #{repSheet}
+                        </if>
+                    </when>
+                    <otherwise>
+                        <if test='repSheet != "0"'>
+                            WHERE REPSHEET = #{repSheet}
+                        </if>
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--2018-08-06-->
+    <!--更新，修该周报-->
+    <update id="alterReported">
+        UPDATE XT_REPORT_INFO SET REPCONTEXT = #{repContext}, REPUPDATE = #{repUpdate}
+        WHERE REPCLASS = #{repClass} AND REPSHEET = #{repSheet} AND REPWEEK = #{repWeek}
+    </update>
+
+    <!--2018-08-06-->
+    <!--更新，修该周报-->
+    <update id="alterReportedByREPID">
+        UPDATE XT_REPORT_INFO SET REPCONTEXT = #{repContext}, REPUPDATE = #{repUpdate}
+        WHERE REPID = #{repId}
+    </update>
+
+    <!--通过周报ID序号进行查看-->
+    <select id="showReportByREPID" resultType="string">
+        SELECT REPCONTEXT FROM XT_REPORT_INFO WHERE REPID = #{repId}
+    </select>
+
+    <!--组长管理员使用，查询本周提交的人数-->
+    <select id="showGroupDataStatistics" resultType="GroupReported">
+        SELECT COUNT(STUNAME)  AS 'NUM',(SELECT COUNT(STUNAME) FROM XT_STUDENT_INFO S
+        JOIN XT_REPORT_INFO R ON (S.STUCLASS = R.REPCLASS AND S.STUSHEET = R.REPSHEET)
+        WHERE STUCLASS = #{stuClass} AND STUGROUP = #{stuGroup} AND REPWEEK = #{repWeek})  AS 'REPORTEDNUM'
+        FROM XT_STUDENT_INFO
+        WHERE STUCLASS = #{stuClass} AND STUGROUP = #{stuGroup}
+    </select>
+    
+    <!--组周报提交状态-->
+    <select id="showGroupReportStatus" resultType="MemberReportStatus">
+        SELECT STUGROUP AS 'STUNAME',IF(ISNULL(REPADDTIME),'未提交','已提交') AS 'STATUS'
+        FROM
+        (
+        SELECT STUGROUP,GROUPSHEET,STUCLASS FROM GROUPREPORT_VIEW WHERE STUCLASS = #{stuClass}
+        <if test='stuGroup != "0"'>
+            AND STUGROUP = #{stuGroup}
+        </if>
+        ) G
+        LEFT JOIN
+        (
+        SELECT REPADDTIME,REPSHEET,REPCLASS FROM XT_REPORT_INFO WHERE REPWEEK = #{repWeek}
+        )R
+        ON(G.GROUPSHEET = R.REPSHEET AND G.STUCLASS = R.REPCLASS)
+        <if test='stuGroup == "0"'>
+            ORDER BY STUGROUP
+        </if>
+    </select>
+
+    <!--周报已提交列表,分页-->
+    <select id="showReportList" resultType="ReportInfo">
+        SELECT REPID,STUNAME,REPCLASS,STUGROUP,REPWEEK,REPADDTIME,REPUPDATE 
+        FROM XT_STUDENT_INFO S 
+        LEFT JOIN XT_REPORT_INFO R 
+        ON(S.STUSHEET = R.REPSHEET AND S.STUCLASS = R.REPCLASS)
+        <where>
+            <if test=' stuClass != "0" '>
+                STUCLASS = #{stuClass}
+            </if>
+            <if test=' stuGroup != "0" '>
+                AND STUGROUP = #{stuGroup}
+            </if>
+            <if test=' repWeek != "0" '>
+                AND REPWEEK = #{repWeek}
+            </if>
+        </where>
+        <if test=' pageNum != "0" and pageSize != "0" '>
+            LIMIT ${pageSize*(pageNum-1)},${pageSize}
+        </if>
+    </select>
+
+    <!--超级管理员使用，按分组查询每个组的提交周报的人数-->
+    <select id="eachClassGroupReportedNum" resultType="GroupNum">
+        SELECT C.STUCLASS,C.STUGROUP,IFNULL(REPORTEDNUM,0) AS 'REPORTEDNUM',NUM AS 'GROUPNUM'
+        FROM
+        (
+        SELECT * FROM CGNUM
+        WHERE STUCLASS = #{repClass}
+        ) C
+        LEFT JOIN
+        (
+        SELECT REPCLASS,STUGROUP,REPWEEK,COUNT(STUNAME) AS 'REPORTEDNUM' FROM REPORT_VIEW WHERE REPWEEK = #{repWeek}
+        AND REPCLASS = #{repClass}
+        GROUP BY STUGROUP
+        ) R
+        ON(R.REPCLASS = C.STUCLASS AND R.STUGROUP = C.STUGROUP)
+        ORDER BY C.STUCLASS,C.STUGROUP
+    </select>
+
+    <!--查询周报数量，用于分页-->
+    <select id="getReportListNum" resultType="int">
+        SELECT COUNT(REPID) 'COUNT' FROM XT_STUDENT_INFO S
+        LEFT JOIN XT_REPORT_INFO R
+        ON(S.STUSHEET = R.REPSHEET AND S.STUCLASS = R.REPCLASS)
+        <where>
+            <if test=' stuClass != "0" '>
+                STUCLASS = #{stuClass}
+            </if>
+            <if test=' stuGroup != "0" '>
+                AND STUGROUP = #{stuGroup}
+            </if>
+            <if test=' repWeek != "0" '>
+                AND REPWEEK = #{repWeek}
+            </if>
+        </where>
+    </select>
+
+    <!--时间线-->
+    <select id="timeLine" resultType="ReportBase">
+        SELECT REPID,REPWEEK,REPADDTIME FROM XT_REPORT_INFO WHERE REPCLASS = #{repClass} AND REPSHEET = #{repSheet}
+    </select>
+
+
+    <!--按照班级查询本班的周报列表-->
+    <select id="selReportByThisWeek" resultType="Report">
+        SELECT REPCLASS,REPSHEET,REPWEEK,REPCONTEXT FROM XT_REPORT_INFO WHERE REPWEEK = #{repWeek} AND REPCLASS = #{repClass}
+    </select>
+
+    <update id="alterStudentInfo">
+        UPDATE XT_REPORT_INFO
+        SET REPCLASS = #{repClass},REPSHEET = #{repSheet}
+        WHERE STUID =#{stuId}
+    </update>
+
+</mapper>
